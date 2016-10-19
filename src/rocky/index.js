@@ -11,9 +11,9 @@ rocky.on('draw', function(event) {
     // Canvas Element Palette
     var palette = {
         'clock': {
-          'bg': '#000',
+          'bg': '#FFF',
           'alt': '',
-          'font': '#AAA'
+          'font': '#555'
         },
         'dash': {
           'bg': '#00A',
@@ -93,7 +93,7 @@ function drawBackground(ctx, palette, dims) {
     ctx.fillStyle = palette.dash.alt;
     ctx.fillRect(dims.dash.third, dims.dash.y, 1, dims.dash.h);
     ctx.fillRect(dims.dash.third * 2, dims.dash.y, 1, dims.dash.h);
-    ctx.fillRect(0, dims.dash.y, w, 1);
+    ctx.fillRect(0, dims.dash.y, dims.w, 1);
 }
 
 function drawTime(ctx, palette, dims) {
@@ -101,8 +101,8 @@ function drawTime(ctx, palette, dims) {
 
   // Time Draw
   ctx.fillStyle = palette.clock.font;
-  ctx.font = '42px bold Bitham';
   ctx.textAlign = 'center';
+  ctx.font = '42px bold Bitham';
   ctx.fillText(datetime.time, dims.clock.x, dims.clock.y);
 }
 
@@ -113,7 +113,7 @@ function drawDate(ctx, palette, dims) {
   ctx.fillStyle = palette.dash.font;
   ctx.font = '18px bold Gothic';
   ctx.fillText(datetime.dayName, dims.dash.posX[0], dims.dash.posY[0]);
-  ctx.fillText(datetime.date, dims.dash.posX[2], dims.dash.posY[2]);
+  ctx.fillText(datetime.date, dims.dash.posX[0], dims.dash.posY[2]);
 }
 
 function drawFeeding(ctx, palette, dims) {
@@ -130,7 +130,7 @@ function drawFeeding(ctx, palette, dims) {
       feedingHeader = '😰';
   }
   ctx.font = '28px bold Gothic';
-  ctx.fillText(feedingHeader, dims.dash.posX[2], dims.dash.posY[1]);
+  ctx.fillText(feedingHeader, dims.dash.posX[2], dims.dash.posY[0]);
 }
 
 // Return a formatted date time
