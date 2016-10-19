@@ -1,28 +1,40 @@
 {
-    "author": "ejulius86@gmail.com",
-    "dependencies": {},
-    "keywords": [],
-    "name": "simpleface",
-    "pebble": {
-        "capabilities": [
-            "location",
-            "health"
-        ],
-        "displayName": "SimpleFace",
-        "enableMultiJS": true,
-        "messageKeys": [],
-        "projectType": "rocky",
-        "resources": {
-            "media": []
-        },
-        "sdkVersion": "3",
-        "targetPlatforms": [
-            "basalt"
-        ],
-        "uuid": "4b6bb563-1cc2-4905-a4a4-516284f42beb",
-        "watchapp": {
-            "watchface": true
-        }
-    },
-    "version": "0.1.0"
+  "name": "simpleface",
+  "version": "0.1.0",
+  "description": "A simple watch face for Pebble Time (first gen).",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dwats/SimpleFace.git"
+  },
+  "author": "Eric Julius",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dwats/SimpleFace/issues"
+  },
+  "homepage": "https://github.com/dwats/SimpleFace#readme",
+  "pebble": {
+      "capabilities": [
+          "location",
+          "health"
+      ],
+      "displayName": "SimpleFace",
+      "enableMultiJS": true,
+      "messageKeys": [],
+      "projectType": "rocky",
+      "resources": {
+          "media": []
+      },
+      "sdkVersion": "3",
+      "targetPlatforms": [
+          "basalt"
+      ],
+      "uuid": "4b6bb563-1cc2-4905-a4a4-516284f42beb",
+      "watchapp": {
+          "watchface": true
+      }
+  }
 }
