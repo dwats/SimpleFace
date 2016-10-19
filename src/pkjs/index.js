@@ -10,7 +10,7 @@ Pebble.on('message', function(event) {
             if (feedingData) {
                 lastFeedingEvent = feedingData.datetime;
                 feedingData = getElapsed(feedingData.datetime);
-            } 
+            }
             // Else use the last good feeding event time.
             else {
                 feedingData = getElapsed(lastFeedingEvent);
@@ -18,7 +18,7 @@ Pebble.on('message', function(event) {
             Pebble.postMessage({
                 'feedingEvent' : {
                     'elapsed': feedingData
-                } 
+                }
             });
         });
     }
