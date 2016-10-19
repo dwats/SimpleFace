@@ -1,0 +1,28 @@
+{
+    "author": "ejulius86@gmail.com",
+    "dependencies": {},
+    "keywords": [],
+    "name": "simpleface",
+    "pebble": {
+        "capabilities": [
+            "location",
+            "health"
+        ],
+        "displayName": "SimpleFace",
+        "enableMultiJS": true,
+        "messageKeys": [],
+        "projectType": "rocky",
+        "resources": {
+            "media": []
+        },
+        "sdkVersion": "3",
+        "targetPlatforms": [
+            "basalt"
+        ],
+        "uuid": "4b6bb563-1cc2-4905-a4a4-516284f42beb",
+        "watchapp": {
+            "watchface": true
+        }
+    },
+    "version": "0.1.0"
+}
