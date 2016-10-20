@@ -1,6 +1,7 @@
 var rocky = require('rocky');
 var monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 var dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+var weather;
 var feedingTime = '-';
 
 rocky.on('draw', function(event) {
@@ -11,9 +12,17 @@ rocky.on('draw', function(event) {
     // Canvas Element Palette
     var palette = {
         'clock': {
-          'bg': '#FFF',
+          'bgs': [
+              '#FFF',
+              '#FFA',
+              '#FA5',
+              '#F55'
+          ],
           'alt': '',
-          'font': '#555'
+          'fonts': [
+              '#555',
+              '#000'
+          ]
         },
         'dash': {
           'bg': '#00A',
@@ -52,20 +61,30 @@ rocky.on('draw', function(event) {
         };
 
     // Draw Elements
-    drawBackground(ctx, palette, dims);
-    drawTime(ctx, palette, dims);
-    drawDate(ctx, palette, dims);
-    //drawWeather(ctx, palette, dims);
-    drawFeeding(ctx, palette, dims);
+    drawClock(ctx, palette, dims);
+    drawDash(ctx, palette, dims);
 
 });
 
 rocky.on('minutechange', function(event) {
     var time = new Date();
-    if (time.getMinutes % 15 === 0 || feedingTime === '-') rocky.postMessage({
-        'fetchFeedings': true
-    });
+    if (time.getMinutes % 15 === 0 || feedingTime === '-') {
+        rocky.postMessage({
+            'fetchFeedings': true
+        });
+    }
+    if (!weather) {
+        rocky.postMessage({
+            'fetchWeather' : true 
+        });
+    }
     rocky.requestDraw();
+});
+
+rocky.on('hourchange', function(event) {
+    rocky.postMessage({
+        'fetchWeather': true
+    });    
 });
 
 rocky.on('message', function(event) {
@@ -78,13 +97,62 @@ rocky.on('message', function(event) {
         }
         rocky.requestDraw();
     }
+    else if (message.weather) {
+        weather = message.weather;
+        if (!weather) {
+            weather = '-';
+        }
+        rocky.requestDraw();
+    }
 });
 
-function drawBackground(ctx, palette, dims) {
+function drawClock(ctx, palette, dims) {
+    var datetime = new Date();
+    var hour = datetime.getHours();
+    var bg;
+    var font;
+    console.log('hour:' + hour);
+    
+    if (hour >= 0 && hour < 4) {
+        bg = palette.clock.bgs[3];
+        font = palette.clock.fonts[1];
+    }
+    else if (hour >= 4 && hour < 8) {
+        bg = palette.clock.bgs[2];
+        font = palette.clock.fonts[1];
+    }
+    else if (hour >= 8 && hour < 12) {
+        bg = palette.clock.bgs[1];
+        font = palette.clock.fonts[0];
+    }
+    else if (hour >= 12 && hour < 16) {
+        bg = palette.clock.bgs[0];
+        font = palette.clock.fonts[0];        
+    }
+    else if (hour >= 16 && hour < 20) {
+        bg = palette.clock.bgs[1];
+        font = palette.clock.fonts[0];
+    }
+    else if (hour >= 20 && hour <= 23) {
+        bg = palette.clock.bgs[2];
+        font = palette.clock.fonts[1];
+    }
+    
+    bg = palette.clock.bgs[2];
+    font = palette.clock.fonts[1];
+    
+    console.log('clock bg: ' + bg);
     // Clock BG
-    ctx.fillStyle = palette.clock.bg;
+    ctx.fillStyle = bg;
     ctx.fillRect(0, 0, dims.w, dims.h);
+    console.log('Clock BG drawn.');
+    
+    // Clock Face (time)
+    drawTime(ctx, font, dims);
+    console.log('drawClock complete.');
+}
 
+function drawDash(ctx, palette, dims) {   
     // Dash row BG
     ctx.fillStyle = palette.dash.bg;
     ctx.fillRect(0, dims.dash.y, dims.dash.w, dims.dash.h);
@@ -94,13 +162,19 @@ function drawBackground(ctx, palette, dims) {
     ctx.fillRect(dims.dash.third, dims.dash.y, 1, dims.dash.h);
     ctx.fillRect(dims.dash.third * 2, dims.dash.y, 1, dims.dash.h);
     ctx.fillRect(0, dims.dash.y, dims.w, 1);
+    
+    // Draw Element Text
+    drawDate(ctx, palette, dims);
+    drawWeather(ctx, palette, dims);
+    drawFeeding(ctx, palette, dims);
+    console.log('drawDash complete.');
 }
 
-function drawTime(ctx, palette, dims) {
+function drawTime(ctx, fnt, dims) {
   var datetime = getDateTime();
 
   // Time Draw
-  ctx.fillStyle = palette.clock.font;
+  ctx.fillStyle = fnt;
   ctx.textAlign = 'center';
   ctx.font = '42px bold Bitham';
   ctx.fillText(datetime.time, dims.clock.x, dims.clock.y);
@@ -114,6 +188,13 @@ function drawDate(ctx, palette, dims) {
   ctx.font = '18px bold Gothic';
   ctx.fillText(datetime.dayName, dims.dash.posX[0], dims.dash.posY[0]);
   ctx.fillText(datetime.date, dims.dash.posX[0], dims.dash.posY[2]);
+}
+
+function drawWeather(ctx, palette, dims) {
+    ctx.fillStyle = palette.dash.fon;
+    ctx.font = '18px bold Gothic';
+    ctx.fillText(weather.temp_f + 'ºF', dims.dash.posX[1], dims.dash.posY[0]);
+    //ctx.fillText(weather.weather, dims.dash.posX[1], dims.dash.posY[2]);
 }
 
 function drawFeeding(ctx, palette, dims) {
