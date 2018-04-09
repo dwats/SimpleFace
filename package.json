@@ -6,7 +6,7 @@
     "pebble": {
         "capabilities": [
             "location",
-            "health"
+            "configurable"
         ],
         "displayName": "SimpleFace",
         "enableMultiJS": true,
